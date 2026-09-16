@@ -47,7 +47,7 @@ public class ShippingCalculatorTests
     {
         var order = new Order
         {
-            OrderId = 1002,
+            OrderId = 1003,
             WeightKg = 2,
             DistanceKm = 10.0,
             Fragile = false,
@@ -58,5 +58,23 @@ public class ShippingCalculatorTests
         var actualShippingCost = ShippingCalculator.CalculateShipping(order.OrderId);
 
         Assert.That(actualShippingCost, Is.EqualTo(27.4));
+    }
+
+    [Test]
+    public void CalculatingInternationalShippingCostCalculatesCostBasedOnOrder()
+    {
+        var order = new Order
+        {
+            OrderId = 1004,
+            WeightKg = 10,
+            DistanceKm = 10.0,
+            Fragile = false,
+            ShippingType = "INTERNATIONAL"
+        };
+
+        ShippingCalculator = new ShippingCalculator(new OrderDetailProviderStub(order));
+        var actualShippingCost = ShippingCalculator.CalculateShipping(order.OrderId);
+
+        Assert.That(actualShippingCost, Is.EqualTo(15.0));
     }
 }
