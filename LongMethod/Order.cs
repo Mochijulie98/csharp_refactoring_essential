@@ -18,12 +18,7 @@ public class Order
     {
         ValidateItems(_items);
 
-        // Subtotal calculation
-        double subtotal = 0.0;
-        foreach (var item in _items)
-        {
-            subtotal += item.Price * item.Quantity;
-        }
+        var subtotal = SubtotalItems(_items);
 
         // Discount rules
         double discount = 0.0;
@@ -44,6 +39,17 @@ public class Order
         double total = taxableAmount + tax;
 
         return new OrderSummary(subtotal, discount, tax, total);
+    }
+
+    private double SubtotalItems(IList<OrderItem> items)
+    {
+        double subtotal = 0.0;
+        foreach (var item in items)
+        {
+            subtotal += item.Price * item.Quantity;
+        }
+
+        return subtotal;
     }
 
     private static void ValidateItems(IList<OrderItem> items)
