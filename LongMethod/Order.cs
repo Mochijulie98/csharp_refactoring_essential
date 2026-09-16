@@ -16,25 +16,28 @@ public class Order
 
     public OrderSummary Summarise()
     {
-        // Validation
-        if (_items == null)
-        {
-            throw new InvalidOperationException("Items cannot be null");
-        }
+        ValidateItems(_items);
 
-        if (_items.Count == 0)
-        {
-            throw new InvalidOperationException("Order must contain items");
-        }
+        var subtotal = SubtotalItems(_items);
 
-        // Subtotal calculation
-        double subtotal = 0.0;
-        foreach (var item in _items)
-        {
-            subtotal += item.Price * item.Quantity;
-        }
+        var discount = ApplyDiscount(subtotal);
 
-        // Discount rules
+        var (total, tax) = CalculateTax(subtotal, discount);
+
+        return new OrderSummary(subtotal, discount, tax, total);
+    }
+
+    private static (double, double) CalculateTax(double subtotal, double discount)
+    {
+        double taxableAmount = subtotal - discount;
+        double tax = taxableAmount * 0.20;
+
+        var total = taxableAmount + tax;
+        return (total, tax);
+    }
+
+    private double ApplyDiscount(double subtotal)
+    {
         double discount = 0.0;
         if (_customer.IsLoyal)
         {
@@ -45,14 +48,31 @@ public class Order
             discount = subtotal * 0.05;
         }
 
-        // Tax calculation
-        double taxableAmount = subtotal - discount;
-        double tax = taxableAmount * 0.20;
+        return discount;
+    }
 
-        // Total calculation
-        double total = taxableAmount + tax;
+    private double SubtotalItems(IList<OrderItem> items)
+    {
+        double subtotal = 0.0;
+        foreach (var item in items)
+        {
+            subtotal += item.Price * item.Quantity;
+        }
 
-        return new OrderSummary(subtotal, discount, tax, total);
+        return subtotal;
+    }
+
+    private static void ValidateItems(IList<OrderItem> items)
+    {
+        if (items == null)
+        {
+            throw new InvalidOperationException("Items cannot be null");
+        }
+
+        if (items.Count == 0)
+        {
+            throw new InvalidOperationException("Order must contain items");
+        }
     }
 }
 
