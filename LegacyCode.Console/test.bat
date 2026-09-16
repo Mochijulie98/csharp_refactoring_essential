@@ -12,5 +12,8 @@ echo ----------------------------------------
 dotnet run --project .\LegacyCode.Console.csproj -- 1003
 echo ----------------------------------------
 
+dotnet run --project .\LegacyCode.Console.csproj -- 1004
+echo ----------------------------------------
+
 echo Done.
 pause
