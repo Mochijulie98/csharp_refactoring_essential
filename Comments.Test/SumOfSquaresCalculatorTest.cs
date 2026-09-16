@@ -6,12 +6,11 @@ using NUnit.Framework;
 public class SumOfSquaresCalculatorTest
 {
     [Test]
-    public void T1()
+    public void CalculatingSumOfSquaresCalculatesTheSumOfSquares()
     {
         int lowerBound = 7;
         int upperBound = 12;
 
-        // Expected: sum of squares from 7 to 12
         int expected = 0;
         for (int i = lowerBound; i <= upperBound; i++)
         {
@@ -19,7 +18,6 @@ public class SumOfSquaresCalculatorTest
         }
 
         int actual = SumOfSquaresCalculator.CalculateSumOfSquares(lowerBound, upperBound);
-
         Assert.That(actual, Is.EqualTo(expected));
     }
 }
