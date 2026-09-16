@@ -10,16 +10,16 @@ public class X1
         for (int i = q; i <= z; i++)
         {
             // Add square of each number in the range
-            p += N(i);
+            p += Square(i);
         }
 
         // Return accumulated sum
         return p;
     }
 
-    static int N(int k)
+    static int Square(int number)
     {
         // Return square of input
-        return k * k;
+        return number * number;
     }
 }
