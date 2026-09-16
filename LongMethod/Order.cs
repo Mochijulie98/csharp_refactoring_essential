@@ -20,7 +20,20 @@ public class Order
 
         var subtotal = SubtotalItems(_items);
 
-        // Discount rules
+        var discount = ApplyDiscount(subtotal);
+
+        // Tax calculation
+        double taxableAmount = subtotal - discount;
+        double tax = taxableAmount * 0.20;
+
+        // Total calculation
+        double total = taxableAmount + tax;
+
+        return new OrderSummary(subtotal, discount, tax, total);
+    }
+
+    private double ApplyDiscount(double subtotal)
+    {
         double discount = 0.0;
         if (_customer.IsLoyal)
         {
@@ -31,14 +44,7 @@ public class Order
             discount = subtotal * 0.05;
         }
 
-        // Tax calculation
-        double taxableAmount = subtotal - discount;
-        double tax = taxableAmount * 0.20;
-
-        // Total calculation
-        double total = taxableAmount + tax;
-
-        return new OrderSummary(subtotal, discount, tax, total);
+        return discount;
     }
 
     private double SubtotalItems(IList<OrderItem> items)
