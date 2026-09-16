@@ -22,14 +22,18 @@ public class Order
 
         var discount = ApplyDiscount(subtotal);
 
-        // Tax calculation
+        var (total, tax) = AddTax(subtotal, discount);
+
+        return new OrderSummary(subtotal, discount, tax, total);
+    }
+
+    private static (double, double) AddTax(double subtotal, double discount)
+    {
         double taxableAmount = subtotal - discount;
         double tax = taxableAmount * 0.20;
 
-        // Total calculation
-        double total = taxableAmount + tax;
-
-        return new OrderSummary(subtotal, discount, tax, total);
+        var total = taxableAmount + tax;
+        return (total, tax);
     }
 
     private double ApplyDiscount(double subtotal)
